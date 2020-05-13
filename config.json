@@ -1,0 +1,25 @@
+{"Danbuuro": [
+  {
+    "criteria": "example_search_criteria",
+    "Ignore": ["example_tag_to_ignore"],
+    "Discord uri": [
+      "https://discordapp.com/api/webhooks/example/URL",
+      "https://discordapp.com/api/webhooks/example2/URL2"],
+    "NSFW": false
+  },
+  {
+    "criteria": "touhou",
+    "Ignore": ["comic"],
+    "Discord uri": [
+      "https://discordapp.com/api/webhooks/example3/URL3",
+      "https://discordapp.com/api/webhooks/example4/URL4"],
+    "NSFW": false
+  },
+  {
+    "criteria": "yuri",
+    "Ignore": ["vomiting", "pregnant", "comic"],
+    "Discord uri": ["https://discordapp.com/api/webhooks/example5/URL5"],
+    "NSFW": false
+  }
+ ]
+}
