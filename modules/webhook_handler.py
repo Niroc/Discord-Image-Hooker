@@ -10,7 +10,15 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     if colour is None:
         colour = 0xd7d7d7  # white, mostly
 
-    embed = DiscordEmbed(title="%s by %s" % (character, artist), color=colour)
+    title_string = "%s by %s" % (character, artist)
+
+    # very log titles will cause the embed to fail
+    if len(title_string) < 256:
+        embed = DiscordEmbed(title=title_string, color=colour)
+    else:
+        title = title_string[0:253] + "..."
+        description = "..." + title_string[253:]
+        embed = DiscordEmbed(title=title, description=description, color=colour)
 
     embed.set_url(url=post_url)
 
