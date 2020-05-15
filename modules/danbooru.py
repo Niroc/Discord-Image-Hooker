@@ -154,11 +154,8 @@ class DanbooruWorker:
 
         # main loop
         while True:
-            # make random sleep delay between 90 seconds & 5 minutes
-            if self.Search_Criteria == "highres":
-                await asyncio.sleep(1200)
-            else:
-                await asyncio.sleep(random.randint(300, 1200))
+            # make random sleep delay between 5 ~ 20 minutes
+            await asyncio.sleep(random.randint(300, 1200))
 
             # use traceback lib so we actually get a stacktrace as we're use asyncio...
             try:
