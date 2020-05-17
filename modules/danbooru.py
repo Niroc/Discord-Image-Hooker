@@ -59,9 +59,9 @@ class DanbooruWorker:
             image_list_json = await response.json()
         except:
             if "502 bad gateway" in response:
-                print('\033[31m' +
-                      "Error: 502 bad gateway - Danbooru Service Temporarily Overloaded." +
-                      '\033[39m')
+                print('\033[31m'
+                      + "Error: 502 bad gateway - Danbooru Service Temporarily Overloaded."
+                      + '\033[39m')
             else:
                 print('\033[31m' + "Error: Failed to encode json")
                 print(response)
@@ -84,8 +84,10 @@ class DanbooruWorker:
             # check if images breaks Discord T+C's
             for illegal_tag in self.Forbidden_Tags:
                 if illegal_tag in Image_metadata['tag_string'] and Image_metadata['rating'] != 's':
-                    print('\033[31m' + "Error: skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" % (
-                        Image_metadata['id'], self.Search_Criteria, illegal_tag) + '\033[39m')
+                    print('\033[31m'
+                          + "Error: skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" %
+                          (Image_metadata['id'], self.Search_Criteria, illegal_tag)
+                          + '\033[39m')
 
                     should_continue = True
 
@@ -101,10 +103,10 @@ class DanbooruWorker:
                 continue
 
             elif self.Post_NSFW is False and Image_metadata['rating'] == 's':
-                print("Adding SFW image matching '%s', ID: %r" % (self.Search_Criteria, Image_metadata['id']))
+                #print("Adding SFW image matching '%s', ID: %r" % (self.Search_Criteria, Image_metadata['id']))
                 Images_to_send.append(Image_metadata)
             elif self.Post_NSFW and Image_metadata['rating'] != 's':
-                print("Adding NSFW image matching '%s', ID: %r" % (self.Search_Criteria, Image_metadata['id']))
+                #print("Adding NSFW image matching '%s', ID: %r" % (self.Search_Criteria, Image_metadata['id']))
                 Images_to_send.append(Image_metadata)
             else:
                 # new entry must not match the desired safety rating
