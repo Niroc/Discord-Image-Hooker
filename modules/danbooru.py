@@ -54,8 +54,14 @@ class DanbooruWorker:
         try:
             image_list_json = await response.json()
         except:
-            print("Failed to encode json")
-            print(response)
+            if "502 bad gateway" in response:
+                print('\033[31m' +
+                      "Error: 502 bad gateway - Danbooru Service Temporarily Overloaded." +
+                      '\033[39m')
+            else:
+                print('\033[31m' + "Error: Failed to encode json")
+                print(response)
+                print('\033[39m')  # reset to default color
             return
 
         Images_to_send = []
@@ -74,7 +80,7 @@ class DanbooruWorker:
             # check if images breaks Discord T+C's
             for illegal_tag in self.Forbidden_Tags:
                 if illegal_tag in Image_metadata['tag_string'] and Image_metadata['rating'] != 's':
-                    print('\033[31m' + "skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" % (
+                    print('\033[31m' + "Error: skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" % (
                         Image_metadata['id'], self.Search_Criteria, illegal_tag) + '\033[39m')
 
                     should_continue = True
@@ -162,7 +168,7 @@ class DanbooruWorker:
             try:
                 await self.check_for_new_images()
             except:
-                print('\033[31m')  # make terminal text red
+                print('\033[31mError: ')  # make terminal text red
                 traceback.print_exc()
                 print('\033[39m')  # reset to default color
 
