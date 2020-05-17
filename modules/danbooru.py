@@ -37,7 +37,7 @@ class DanbooruWorker:
 
         # List of Strings - We need to filter out these on NSFW images so we don't break Discords T+C's
         # I'm pretty sure you need a gold account with danbooru to get loli and shota images anyway
-        self.Forbidden_Tags = [' guro ', ' loli ', " shota "]
+        self.Forbidden_Tags = [' guro ', ' loli ', ' shota ']
 
         # We will need to keep track of the last image ID we posted
         self.Previous_Image_ID = None
