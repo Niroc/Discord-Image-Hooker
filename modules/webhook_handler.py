@@ -19,7 +19,6 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         title = title_string[0:253] + "..."
         description = "..." + title_string[253:]
         embed = DiscordEmbed(title=title, description=description, color=colour)
-
     embed.set_url(url=post_url)
 
     if timestamp is not None:
@@ -91,4 +90,8 @@ async def post_embeds(webhook_url, embed_list):
         webhook.add_embed(embed)
 
     response = webhook.execute()
-    #print(response)
+    if response.status_code == 404 or response.status_code == 401:
+        print('\033[31m'  # set terminal text to red
+              + 'Error: The following Webhook URL in your config.json file is invalid...\n'
+              + '%r' % webhook_url
+              + '\033[39m')  # reset to default color
