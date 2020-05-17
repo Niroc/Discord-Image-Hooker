@@ -21,6 +21,9 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         embed = DiscordEmbed(title=title, description=description, color=colour)
     embed.set_url(url=post_url)
 
+    # shameless self-promotion
+    embed.set_footer(text="Powered by Discord Image Hooker")
+
     if timestamp is not None:
         embed.set_timestamp(timestamp=int(timestamp))
 
