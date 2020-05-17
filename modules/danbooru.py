@@ -46,7 +46,11 @@ class DanbooruWorker:
         # used to get the latest image id on startup
         response = await requests.get(self.Danbooru_Initialize_URL % self.Search_Criteria)
         json = await response.json()
-        self.Previous_Image_ID = json[0]['id']
+        # if the json length is zero, the search reference is not valid
+        if len(json) == 0:
+            pass
+        else:
+            self.Previous_Image_ID = json[0]['id']
 
     async def check_for_new_images(self):
         # get the latest image list uploaded after self.Previous_Image_ID
@@ -88,8 +92,8 @@ class DanbooruWorker:
             # check if images contain tags user wants to ignore
             for ignored_tag in self.Ignore_Criteria:
                 if ignored_tag in Image_metadata['tag_string']:
-                    print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
-                        Image_metadata['id'], self.Search_Criteria, ignored_tag))
+                    #print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
+                    #    Image_metadata['id'], self.Search_Criteria, ignored_tag))
                     should_continue = True
 
             if should_continue:
@@ -158,6 +162,12 @@ class DanbooruWorker:
         print("Task created searching Danbooru for %r, NSFW: %r" % (self.Search_Criteria, self.Post_NSFW))
         # acquire most recent Danbooru post ID match our search criteria
         await self.get_latest_image_id()
+
+        if self.Previous_Image_ID is None:
+            print('\033[31m'  # set terminal text to red
+                  + 'Error: There are no tags matching %r on Danbooru' % self.Search_Criteria
+                  + '\033[39m')  # reset to default color
+            return  # return before we start the while loop
 
         # main loop
         while True:
