@@ -74,8 +74,9 @@ class DanbooruWorker:
             # check if images breaks Discord T+C's
             for illegal_tag in self.Forbidden_Tags:
                 if illegal_tag in Image_metadata['tag_string'] and Image_metadata['rating'] != 's':
-                    print("skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" % (
-                        Image_metadata['id'], self.Search_Criteria, illegal_tag))
+                    print('\033[31m' + "skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" % (
+                        Image_metadata['id'], self.Search_Criteria, illegal_tag) + '\033[39m')
+
                     should_continue = True
 
             # check if images contain tags user wants to ignore
@@ -161,8 +162,9 @@ class DanbooruWorker:
             try:
                 await self.check_for_new_images()
             except:
+                print('\033[31m')  # make terminal text red
                 traceback.print_exc()
-
+                print('\033[39m')  # reset to default color
 
 async def return_valid_source_url(url, pixiv_ID):
     # Danbooru doesn't supply the valid pixiv source url in the json metadata so, we need to fix it for them...
