@@ -5,15 +5,20 @@ Auto image poster for Discord using Webhooks that's able to search for specific 
 * Danbooru
 
 ### Requirements
+You need to install these...
 * [Python >= 3.5](https://www.python.org/downloads/)
 * [aiohttp-requests](https://pypi.org/project/aiohttp-requests/)
 * [discord-webhook](https://pypi.org/project/discord-webhook/)
 
 ## How to Configure
-Here's a YouTube video showing how to make a webhook and add it to the config.json file<br />
-[![https://cdn.discordapp.com/attachments/601389892299128834/710102466884009984/Screenshot_2020-05-13_13-13-15.png](http://img.youtube.com/vi/0am7B7gLPjA/0.jpg)](http://www.youtube.com/watch?v=0am7B7gLPjA "tutorial")
-
-Here's a closer look at the config.json file...<br />
+Here's a link to Discords tutorial on how to setup webhooks in your Discord server, the only section you need to follow is "Making a Webhook".<br/>
+https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+<br /><br />
+After you've made your webhook(s) open up the "config.json" file and fill in the respective fields. (Also, delete any unneeded example config)
 ![config example](https://cdn.discordapp.com/attachments/601389892299128834/710105817889636402/Screenshot_2020-05-13_13-26-45.png)
+<br /><br />
+Finally to start the script, run "python3 main.py" from the command line.
+<br /><br />
 
-To start the script, run "main.py"
+Here's a YouTube video demonstrating it being setup and sending an image to Discord within 2 minutes.<br />
+[![https://cdn.discordapp.com/attachments/601389892299128834/710102466884009984/Screenshot_2020-05-13_13-13-15.png](http://img.youtube.com/vi/qhZzlEGbJOQ/0.jpg)](https://youtu.be/qhZzlEGbJOQ)
