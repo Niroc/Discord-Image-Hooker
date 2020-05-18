@@ -10,15 +10,37 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     if colour is None:
         colour = 0xd7d7d7  # white, mostly
 
+    # workout source link if available to put in embed description
+    if is_banned and source is not None:
+        description_text = "[Artist %r is banned from %r but, click here for the source anyway...](%s)" % (artist, origin_site, source)
+    elif is_banned and source is None:
+        # we can't provide any useful information, there is no point making an embed...
+        return None
+    elif source == '' or source is None:
+        description_text = 'Source Unavailable'
+    elif source is not None:
+        description_text = '[Source Link](%s)' % source
+    else:
+        # this should never get called
+        description_text = ''
+
     title_string = "%s by %s" % (character, artist)
 
     # very log titles will cause the embed to fail
     if len(title_string) < 256:
-        embed = DiscordEmbed(title=title_string, color=colour)
+        title = title_string
     else:
         title = title_string[0:253] + "..."
-        description = "..." + title_string[253:]
-        embed = DiscordEmbed(title=title, description=description, color=colour)
+        title_leftovers = "..." + title_string[253:]
+        # concat leftovers with source link
+        description_text = title_leftovers + "\n" + description_text
+
+    if len(description_text) > 0:
+        embed = DiscordEmbed(title=title, description=description_text, color=colour)
+    else:
+        embed = DiscordEmbed(title=title, color=colour)
+
+    # URL to post (not the source)
     embed.set_url(url=post_url)
 
     # shameless self-promotion
@@ -29,21 +51,6 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
 
     if origin_site is not None:
         embed.set_author(name=origin_site, url=origin_site_url)
-
-    if is_banned and source is not None:
-        embed.add_embed_field(
-            name="Artist %r is banned from %r but, here is the source anyway..." % (artist, origin_site), value=source
-        )
-    elif is_banned and source is None:
-        # we can't provide any useful information, there is no point making an embed...
-        return None
-    elif source == '' or source is None:
-        embed.add_embed_field(name="Source", value="*unavailable*")
-    elif source is not None:
-        embed.add_embed_field(name="Source", value=source)
-    else:
-        # this should never get called
-        pass
 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
