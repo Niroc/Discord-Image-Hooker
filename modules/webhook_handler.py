@@ -16,7 +16,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     elif is_banned and source is None:
         # we can't provide any useful information, there is no point making an embed...
         return None
-    elif source == '' or source is None:
+    elif source == '' or source is None or not source.startswith('http'):
         description_text = 'Source Unavailable'
     elif source is not None:
         description_text = '[Source Link](%s)' % source
@@ -55,8 +55,10 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
         embed.add_embed_field(inline=False, name="Video URL (I'm not allowed to embed these like with images)", value=file_url)
-    else:
+    elif not is_banned:
         embed.set_image(url=file_url)
+    else:
+        pass
 
     return embed
 
