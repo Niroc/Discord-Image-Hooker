@@ -2,6 +2,7 @@ import asyncio
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
+
 async def make_embed(character=None, artist=None, post_url=None, file_url=None, colour=None, timestamp=None,
                      origin_site=None, origin_site_url=None, source=None, is_banned=False):
     #print("character=%r\nartist=%r\npost_url=%r\nfile_url=%r\ncolour=%r\ntimestamp=%r\norigin_site=%r\norigin_site_url=%r\nsource=%r\nis_banned=%r\n" % (
@@ -63,7 +64,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     return embed
 
 
-async def send_to_discord(webhook_list, embed_list):
+async def send_to_discord(webhook_list, embed_list, criteria):
     # Webhooks can send a maximum of 10 embeds per transaction so, lets make unique
     # dictionary entries each with a list that's limited to a max of 10 embeds.
     # This should help us avoid Discord's rate limit
@@ -82,7 +83,7 @@ async def send_to_discord(webhook_list, embed_list):
 
     # loop around each possible set of 10 embeds
     for key, sorted_list_of_embeds in embeds_to_send.items():
-        print("Sending %r embed/s" % len(sorted_list_of_embeds))
+        print("Sending %r embed/s matching %r" % (len(sorted_list_of_embeds), criteria))
         # send to each possible webhook uri
         for webhook_uri in webhook_list:
             await post_embeds(webhook_uri, sorted_list_of_embeds)

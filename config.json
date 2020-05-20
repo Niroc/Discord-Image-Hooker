@@ -1,4 +1,4 @@
-{"Danbuuro": [
+[
   {
     "criteria": "example_search_criteria",
     "Ignore": ["example_tag_to_ignore"],
@@ -17,9 +17,8 @@
   },
   {
     "criteria": "yuri",
-    "Ignore": ["vomiting", "pregnant", "comic"],
+    "Ignore": ["touhou", "vomiting", "pregnant", "comic"],
     "Discord uri": ["https://discordapp.com/api/webhooks/example5/URL5"],
     "NSFW": false
   }
  ]
-}
