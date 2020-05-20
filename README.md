@@ -3,6 +3,7 @@ Auto image poster for Discord using Webhooks that's able to search for specific 
 ![DisHooker Example](https://cdn.discordapp.com/attachments/591684716760006692/711903037374857306/Screenshot_2020-05-18_12-27-21.png)
 ## Currently supports scraping from...
 * Danbooru
+* Konachan
 
 ### Requirements
 You need to install these...
@@ -17,10 +18,7 @@ Here's a link to Discords tutorial on how to setup webhooks in your Discord serv
 https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
 <br /><br />
 After you've made your webhook(s) open up the "config.json" file and fill in the respective fields. (Also, delete any unneeded example config)
-![config example](https://cdn.discordapp.com/attachments/601389892299128834/710105817889636402/Screenshot_2020-05-13_13-26-45.png)
+![config example](https://cdn.discordapp.com/attachments/591684716760006692/712639574408429578/Screenshot_2020-05-20_13-14-38.png)
 <br /><br />
 Finally to start the script, run "python3 main.py" from the command line.
-<br /><br />
 
-Here's a YouTube video demonstrating it being setup and sending an image to Discord within 2 minutes.<br />
-[![https://cdn.discordapp.com/attachments/601389892299128834/710102466884009984/Screenshot_2020-05-13_13-13-15.png](http://img.youtube.com/vi/qhZzlEGbJOQ/0.jpg)](https://youtu.be/qhZzlEGbJOQ)
