@@ -1,14 +1,16 @@
 # Discord-Image-Hooker
-Auto image poster for Discord using Webhooks that's able to search for specific tags and filter out sub tags to fine tune your results and also able to send the result to multiple Discord Webhooks if required.
+Auto image poster for Discord using Webhooks that's able to search for specific tags and filter out sub tags to fine tune your results and also able to send the result to multiple Discord Webhooks if required. Also, this has MD5 checking per search reference to help mitigate duplicate images being posted
 ![DisHooker Example](https://cdn.discordapp.com/attachments/591684716760006692/711903037374857306/Screenshot_2020-05-18_12-27-21.png)
 ## Currently supports scraping from...
 * Danbooru
 
 ### Requirements
 You need to install these...
-* [Python >= 3.5](https://www.python.org/downloads/)
+* [Python >= 3.6](https://www.python.org/downloads/)
 * [aiohttp-requests](https://pypi.org/project/aiohttp-requests/)
 * [discord-webhook](https://pypi.org/project/discord-webhook/)
+* [beautifulsoup4](https://pypi.org/project/beautifulsoup4/)
+* [aiosqlite](https://pypi.org/project/aiosqlite/)
 
 ## How to Configure
 Here's a link to Discords tutorial on how to setup webhooks in your Discord server, the only section you need to follow is "Making a Webhook".<br/>
