@@ -2,10 +2,9 @@ import asyncio
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
-
 async def make_embed(character=None, artist=None, post_url=None, file_url=None, colour=None, timestamp=None,
                      origin_site=None, origin_site_url=None, source=None, is_banned=False):
-    #print("character=%r\nartist=%r\npost_url=%r\nfile_url=%r\ncolour=%r\ntimestamp=%r\norigin_site=%r\norigin_site_url=%r\nsource=%r\nis_banned=%r\n" % (
+    # print("character=%r\nartist=%r\npost_url=%r\nfile_url=%r\ncolour=%r\ntimestamp=%r\norigin_site=%r\norigin_site_url=%r\nsource=%r\nis_banned=%r\n" % (
     #    character, artist, post_url, file_url, colour, timestamp, origin_site, origin_site_url, source, is_banned))
 
     if colour is None:
@@ -13,7 +12,8 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
 
     # workout source link if available to put in embed description
     if is_banned and source is not None:
-        description_text = "[Artist %r is banned from %r but, click here for the source anyway...](%s)" % (artist, origin_site, source)
+        description_text = "[Artist %r is banned from %r but, click here for the source anyway...](%s)" % (
+        artist, origin_site, source)
     elif is_banned and source is None:
         # we can't provide any useful information, there is no point making an embed...
         return None
@@ -55,7 +55,8 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
-        embed.add_embed_field(inline=False, name="Video URL (I'm not allowed to embed these like with images)", value=file_url)
+        embed.add_embed_field(inline=False, name="Video URL (I'm not allowed to embed these like with images)",
+                              value=file_url)
     elif not is_banned:
         embed.set_image(url=file_url)
     else:
@@ -71,6 +72,8 @@ async def send_to_discord(webhook_list, embed_list, criteria):
     unique_key = "a"
     embeds_to_send = {unique_key: []}
 
+    print("Sending %r embed/s matching %r" % (len(embed_list), criteria))
+
     for embed in embed_list:
         # check if we've hit the 10 embed limit
         if len(embeds_to_send[unique_key]) == 10:
@@ -83,7 +86,6 @@ async def send_to_discord(webhook_list, embed_list, criteria):
 
     # loop around each possible set of 10 embeds
     for key, sorted_list_of_embeds in embeds_to_send.items():
-        print("Sending %r embed/s matching %r" % (len(sorted_list_of_embeds), criteria))
         # send to each possible webhook uri
         for webhook_uri in webhook_list:
             await post_embeds(webhook_uri, sorted_list_of_embeds)
