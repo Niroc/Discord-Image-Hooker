@@ -14,7 +14,9 @@ class KonachanSettings:
         # We will need to keep track of the last image ID we posted
         self.Previous_Image_ID = None
 
+        # sites like to have custom field names
         self.tag_json_title = 'tags'
+        self.md5_tag = 'md5'
 
         # On some sites, just trying get the json response leaves us with permission errors
         # ...probably to stop people using scripts...

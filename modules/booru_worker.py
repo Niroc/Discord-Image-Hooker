@@ -119,15 +119,15 @@ class SearchTask:
                 #print("doesn't match safety rating, continuing")
                 continue
 
-            if 'md5' not in Image_metadata:
+            if current_booru_obj.md5_tag not in Image_metadata:
                 #print("found malformed json or a banned user, continuing")
                 continue
 
             # finally check if image already exists in database
-            db_response = await self.database.check_for_value(self.table_name, Image_metadata['md5'])
+            db_response = await self.database.check_for_value(self.table_name, Image_metadata[current_booru_obj.md5_tag])
             if db_response[0] == 0:
                 # add to db
-                await self.database.add_md5_checksum(self.table_name, Image_metadata['md5'])
+                await self.database.add_md5_checksum(self.table_name, Image_metadata[current_booru_obj.md5_tag])
             else:
                 # already exists in db
                 #print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
