@@ -1,5 +1,6 @@
 from aiohttp_requests import requests
 from bs4 import BeautifulSoup
+import asyncio
 
 
 class KonachanSettings:
@@ -59,5 +60,8 @@ class KonachanSettings:
 
         for each in soup.find_all("li", class_="tag-link tag-type-character"):
             characters += str(each).split('data-name="')[1].split('" data-type=')[0] + ' '
+
+        # sleep for one second to avoid hitting the rate limit
+        await asyncio.sleep(1)
 
         return characters, artist
