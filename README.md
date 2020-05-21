@@ -1,5 +1,6 @@
 # Discord-Image-Hooker
-Auto image poster for Discord using Webhooks that's able to search for specific tags and filter out sub tags to fine tune your results and also able to send the result to multiple Discord Webhooks if required. Also, this has MD5 checking per search reference to help mitigate duplicate images being posted.<br/>
+Auto image poster for Discord using Webhooks that's able to search for specific tags and filter out sub tags to fine tune your results and also able to send the result to multiple Discord Webhooks if required. Also, this has MD5 checking per search reference to help mitigate duplicate images being posted.<br/><br/>
+This will filter out NSFW images that break Discords T&C's<br/><br/>
 ![DisHooker Example](https://cdn.discordapp.com/attachments/591684716760006692/712641214163451904/Screenshot_2020-05-20_13-21-19.png)
 ## Currently supports scraping from...
 (You can enable or disable these per search reference if you do not like a particular imageboard)
