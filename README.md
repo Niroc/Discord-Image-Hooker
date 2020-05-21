@@ -2,6 +2,7 @@
 Auto image poster for Discord using Webhooks that's able to search for specific tags and filter out sub tags to fine tune your results and also able to send the result to multiple Discord Webhooks if required. Also, this has MD5 checking per search reference to help mitigate duplicate images being posted.<br/>
 ![DisHooker Example](https://cdn.discordapp.com/attachments/591684716760006692/712641214163451904/Screenshot_2020-05-20_13-21-19.png)
 ## Currently supports scraping from...
+(You can enable or disable these per search reference if you do not like a particular imageboard)
 * Danbooru
 * Konachan
 
@@ -18,7 +19,7 @@ Here's a link to Discords tutorial on how to setup webhooks in your Discord serv
 https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
 <br /><br />
 After you've made your webhook(s) open up the "config.json" file and fill in the respective fields. (Also, delete any unneeded example config)
-![config example](https://cdn.discordapp.com/attachments/591684716760006692/712639574408429578/Screenshot_2020-05-20_13-14-38.png)
+![config example](https://cdn.discordapp.com/attachments/591684716760006692/713002817262059560/Screenshot_2020-05-21_13-18-26.png)
 <br /><br />
 Finally to start the script, run "python3 main.py" from the command line.
 
