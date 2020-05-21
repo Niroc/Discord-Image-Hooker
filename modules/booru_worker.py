@@ -3,20 +3,37 @@ import random
 import traceback
 from aiohttp_requests import requests
 from modules import webhook_handler
-# custom tweaks for each booru's
+# custom tweaks for each booru
 from modules import conf_danbooru
 from modules import conf_konachan
+
+
+def add_booru_to_check(config):
+    # we can use this to dynamically add booru's enabled by the user
+    booru_dict = {
+        "Danbooru": conf_danbooru.DanbooruSettings(),
+        "Konachan": conf_konachan.KonachanSettings()
+    }
+    enabled_boards = []
+    for key, board_object in booru_dict.items():
+        try:
+            if config[key]:  # flag must be set to true
+                enabled_boards.append(board_object)
+        except:
+            pass  # nothing was configured
+    if len(enabled_boards) == 0:
+        print('\033[31mError: No boards have been activated in config.json file to search for %r\033[39m' % config[
+            'criteria'])
+    return enabled_boards
+
 
 class SearchTask:
     def __init__(self, database, self_config):
         self.table_name = ''
-        self. database = database
+        self.database = database
 
-        # booru modules that have been configured
-        self.booru_objects = [
-            conf_danbooru.DanbooruSettings(),
-            conf_konachan.KonachanSettings()
-        ]
+        # booru modules will be loaded into here if configured
+        self.booru_objects = add_booru_to_check(self_config)
 
         # List of Strings - the Discord Webhook/s we will post the images to
         self.Discord_Webhook_URL_List = self_config['Discord uri']
@@ -50,9 +67,16 @@ class SearchTask:
 
     async def get_latest_image_id(self, current_booru_obj):
         # used to get the latest image id on startup
-        response = await requests.get(current_booru_obj.Initialize_URL % self.Search_Criteria,
-                                      headers=self.token_headers)
-        json = await response.json()
+
+        # check if booru requires bespoke get function
+        if current_booru_obj.custom_get_function:
+            json = await current_booru_obj.custom_request_command(
+                current_booru_obj.Initialize_URL % self.Search_Criteria)
+        else:
+            # get json the simple way
+            response = await requests.get(current_booru_obj.Initialize_URL % self.Search_Criteria,
+                                          headers=self.token_headers)
+            json = await response.json()
         # if the json length is zero, the search reference is not valid
         if len(json) == 0:
             print("There are no matches for %r on board %r" % (self.Search_Criteria, current_booru_obj.board_name))
@@ -63,21 +87,27 @@ class SearchTask:
 
     async def check_for_new_images(self, current_booru_obj):
         # get the latest image list uploaded after self.Previous_Image_ID
-        response = await requests.get(current_booru_obj.Scrape_URL % (self.Search_Criteria,
-                                                                      current_booru_obj.Previous_Image_ID))
-        try:
-            image_list_json = await response.json()
-        except:
-            print('\033[31m' + "Error: Failed to encode json")
-            print(response)
-            print('\033[39m')  # reset to default color
-            return
+
+        # check if booru requires bespoke get function
+        if current_booru_obj.custom_get_function:
+            image_list_json = await current_booru_obj.custom_request_command(
+                current_booru_obj.Initialize_URL % self.Search_Criteria)
+        else:
+            response = await requests.get(current_booru_obj.Scrape_URL % (self.Search_Criteria,
+                                                                          current_booru_obj.Previous_Image_ID))
+            try:
+                image_list_json = await response.json()
+            except:
+                print('\033[31m' + "Error: Failed to encode json")
+                print(response)
+                print('\033[39m')  # reset to default color
+                return
 
         Images_to_send = []
         for Image_metadata in image_list_json:
             # Discord Webhooks can send multiple embeds in a single message
             # so lets build a list of items to send...
-
+            print("checking: %r" % Image_metadata['id'])
             # check if the image ID matches our previous image idea on record
             if Image_metadata['id'] == current_booru_obj.Previous_Image_ID:
                 continue
@@ -98,39 +128,40 @@ class SearchTask:
             # check if images contain tags user wants to ignore
             for ignored_tag in self.Ignore_Criteria:
                 if ignored_tag in Image_metadata[current_booru_obj.tag_json_title]:
-                    #print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
+                    # print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
                     #    Image_metadata['id'], self.Search_Criteria, ignored_tag))
                     should_continue = True
 
             # need this due to the use of nested for loops
             if should_continue:
                 # skip to next image in list
-                #print("continuing")
+                # print("continuing")
                 continue
 
             # check matches one of the desired safety ratings else continue to next loop if it doesn't
             if str(self.Post_NSFW).lower() == "any":
                 pass  # we don't care about safety rating
-            elif self.Post_NSFW is False and Image_metadata['rating'] == 's':
+            elif self.Post_NSFW is False and Image_metadata['rating'].startswith('s'):
                 pass
-            elif self.Post_NSFW and Image_metadata['rating'] != 's':
+            elif self.Post_NSFW and Image_metadata['rating'].startswith('s'):
                 pass
             else:  # new entry must not match the desired safety rating
-                #print("doesn't match safety rating, continuing")
+                # print("doesn't match safety rating, continuing")
                 continue
 
             if current_booru_obj.md5_tag not in Image_metadata:
-                #print("found malformed json or a banned user, continuing")
+                # print("found malformed json or a banned user, continuing")
                 continue
 
             # finally check if image already exists in database
-            db_response = await self.database.check_for_value(self.table_name, Image_metadata[current_booru_obj.md5_tag])
+            db_response = await self.database.check_for_value(self.table_name,
+                                                              Image_metadata[current_booru_obj.md5_tag])
             if db_response[0] == 0:
                 # add to db
                 await self.database.add_md5_checksum(self.table_name, Image_metadata[current_booru_obj.md5_tag])
             else:
                 # already exists in db
-                #print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
+                # print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
                 continue
 
             # we must met all of the criteria outlined above so add the image...
@@ -188,7 +219,7 @@ class SearchTask:
         # main loop
         while True:
             # make random sleep delay between 5 ~ 20 minutes
-            await asyncio.sleep(random.randint(300, 1200))
+            await asyncio.sleep(random.randint(60, 120))
 
             # use traceback lib so we actually get a stacktrace as we're use asyncio...
             try:

@@ -2,23 +2,29 @@
   {
     "criteria": "example_search_criteria",
     "Ignore": ["example_tag_to_ignore"],
+    "NSFW": false,
     "Discord uri": [
       "https://discordapp.com/api/webhooks/example/URL",
       "https://discordapp.com/api/webhooks/example2/URL2"],
-    "NSFW": false
+    "Danbooru": true,
+    "Konachan": true
   },
   {
     "criteria": "touhou",
     "Ignore": ["comic"],
+    "NSFW": false,
     "Discord uri": [
       "https://discordapp.com/api/webhooks/example3/URL3",
       "https://discordapp.com/api/webhooks/example4/URL4"],
-    "NSFW": false
+    "Danbooru": true,
+    "Konachan": true
   },
   {
     "criteria": "yuri",
     "Ignore": ["touhou", "vomiting", "pregnant", "comic"],
+    "NSFW": false,
     "Discord uri": ["https://discordapp.com/api/webhooks/example5/URL5"],
-    "NSFW": false
+    "Danbooru": true,
+    "Konachan": true
   }
  ]
