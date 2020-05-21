@@ -219,7 +219,7 @@ class SearchTask:
         # main loop
         while True:
             # make random sleep delay between 5 ~ 20 minutes
-            await asyncio.sleep(random.randint(60, 120))
+            await asyncio.sleep(random.randint(300, 1200))
 
             # use traceback lib so we actually get a stacktrace as we're use asyncio...
             try:
