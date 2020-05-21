@@ -15,6 +15,9 @@ class KonachanSettings:
         # We will need to keep track of the last image ID we posted
         self.Previous_Image_ID = None
 
+        # some boards require obscure aways to get the json metadata (like safebooru)
+        self.custom_get_function = False
+
         # sites like to have custom field names
         self.tag_json_title = 'tags'
         self.md5_tag = 'md5'
@@ -29,7 +32,8 @@ class KonachanSettings:
     async def get_json_data(self, image_metadata):
         img_id = str(image_metadata['id'])
 
-        timestamp = image_metadata['created_at']  # we actually get a correct epoch unlike Danbooru none utc datetime string
+        timestamp = image_metadata[
+            'created_at']  # we actually get a correct epoch unlike Danbooru none utc datetime string
 
         source = image_metadata['source']
 

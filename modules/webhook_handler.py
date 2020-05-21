@@ -65,14 +65,14 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     return embed
 
 
-async def send_to_discord(webhook_list, embed_list, criteria):
+async def send_to_discord(webhook_list, embed_list, criteria, nsfw):
     # Webhooks can send a maximum of 10 embeds per transaction so, lets make unique
     # dictionary entries each with a list that's limited to a max of 10 embeds.
     # This should help us avoid Discord's rate limit
     unique_key = "a"
     embeds_to_send = {unique_key: []}
 
-    print("Sending %r embed/s matching %r" % (len(embed_list), criteria))
+    print("Sending %r embed/s matching %r NSFW = %r" % (len(embed_list), criteria, nsfw))
 
     for embed in embed_list:
         # check if we've hit the 10 embed limit
