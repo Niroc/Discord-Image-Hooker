@@ -22,8 +22,8 @@ def add_booru_to_check(config):
         except:
             pass  # nothing was configured
     if len(enabled_boards) == 0:
-        print('\033[31mError: No boards have been activated in config.json file to search for %r\033[39m' % config[
-            'criteria'])
+        print('\033[31mError: No boards have been activated in config.json file to search for %r\033[39m' %
+              config['criteria'])
     return enabled_boards
 
 
@@ -107,7 +107,7 @@ class SearchTask:
         for Image_metadata in image_list_json:
             # Discord Webhooks can send multiple embeds in a single message
             # so lets build a list of items to send...
-            print("checking: %r" % Image_metadata['id'])
+            #print("checking: %r" % Image_metadata['id'])
             # check if the image ID matches our previous image idea on record
             if Image_metadata['id'] == current_booru_obj.Previous_Image_ID:
                 continue
@@ -128,14 +128,14 @@ class SearchTask:
             # check if images contain tags user wants to ignore
             for ignored_tag in self.Ignore_Criteria:
                 if ignored_tag in Image_metadata[current_booru_obj.tag_json_title]:
-                    # print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
+                    #print("skipping image %r matching '%s' because it matches ignore tag: %s" % (
                     #    Image_metadata['id'], self.Search_Criteria, ignored_tag))
                     should_continue = True
 
             # need this due to the use of nested for loops
             if should_continue:
                 # skip to next image in list
-                # print("continuing")
+                #print("continuing")
                 continue
 
             # check matches one of the desired safety ratings else continue to next loop if it doesn't
@@ -146,11 +146,11 @@ class SearchTask:
             elif self.Post_NSFW and Image_metadata['rating'].startswith('s'):
                 pass
             else:  # new entry must not match the desired safety rating
-                # print("doesn't match safety rating, continuing")
+                #print("doesn't match safety rating, continuing")
                 continue
 
             if current_booru_obj.md5_tag not in Image_metadata:
-                # print("found malformed json or a banned user, continuing")
+                #print("found malformed json or a banned user, continuing")
                 continue
 
             # finally check if image already exists in database
@@ -161,7 +161,7 @@ class SearchTask:
                 await self.database.add_md5_checksum(self.table_name, Image_metadata[current_booru_obj.md5_tag])
             else:
                 # already exists in db
-                # print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
+                #print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
                 continue
 
             # we must met all of the criteria outlined above so add the image...
