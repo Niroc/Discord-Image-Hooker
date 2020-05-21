@@ -135,7 +135,6 @@ class SearchTask:
             # need this due to the use of nested for loops
             if should_continue:
                 # skip to next image in list
-                #print("continuing")
                 continue
 
             # check matches one of the desired safety ratings else continue to next loop if it doesn't
@@ -143,14 +142,12 @@ class SearchTask:
                 pass  # we don't care about safety rating
             elif self.Post_NSFW is False and Image_metadata['rating'].startswith('s'):
                 pass
-            elif self.Post_NSFW and Image_metadata['rating'].startswith('s'):
+            elif self.Post_NSFW and not Image_metadata['rating'].startswith('s'):
                 pass
             else:  # new entry must not match the desired safety rating
-                #print("doesn't match safety rating, continuing")
                 continue
 
             if current_booru_obj.md5_tag not in Image_metadata:
-                #print("found malformed json or a banned user, continuing")
                 continue
 
             # finally check if image already exists in database
@@ -231,7 +228,10 @@ class SearchTask:
                 if len(embeds) == 0:
                     pass  # there's nothing to send...
                 else:
-                    await webhook_handler.send_to_discord(self.Discord_Webhook_URL_List, embeds, self.Search_Criteria)
+                    await webhook_handler.send_to_discord(self.Discord_Webhook_URL_List,
+                                                          embeds,
+                                                          self.Search_Criteria,
+                                                          self.Post_NSFW)
             except:
                 print('\033[31mError: ')  # make terminal text red
                 traceback.print_exc()
