@@ -15,7 +15,7 @@ class KonachanSettings:
         # We will need to keep track of the last image ID we posted
         self.Previous_Image_ID = None
 
-        # some boards require obscure aways to get the json metadata (like safebooru)
+        # some boards require obscure ways to get the json metadata (like safebooru)
         self.custom_get_function = False
 
         # sites like to have custom field names
