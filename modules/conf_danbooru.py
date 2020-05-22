@@ -61,8 +61,12 @@ async def return_valid_source_url(url, pixiv_ID):
 
 
 async def make_utc_epoch_string(date_time_str):
-    # use witchcraft to get an UTC epoch string that's accepted by 'discord_webhook.py' and actually accurate...
-    date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S.%f%z')
-    utc_time_struct = date_time_obj.utctimetuple()
-    utc_epoch_string = datetime.datetime.fromtimestamp(time.mktime(utc_time_struct)).strftime('%s')
-    return utc_epoch_string
+    try:
+        # use witchcraft to get an UTC epoch string that's accepted by 'discord_webhook.py' and actually accurate...
+        date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%dT%H:%M:%S.%f%z')
+        utc_time_struct = date_time_obj.utctimetuple()
+        utc_epoch_string = datetime.datetime.fromtimestamp(time.mktime(utc_time_struct)).strftime('%s')
+        return utc_epoch_string
+    except:
+        # Doesn't work on Windows
+        return None
