@@ -70,7 +70,7 @@ class SearchTask:
     async def gelbooru_get_method(self, url):
         # get content
         response = await requests.get(url, headers=self.token_headers)
-        # we have to read it into byte array because safebooru is trash
+        # we have to read it into byte array for gelbooru based boards
         message_content_string = await response.read()
         # convert bytes to JSON
         message_json = json.loads(message_content_string)
