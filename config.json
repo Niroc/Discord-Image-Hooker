@@ -7,7 +7,8 @@
       "https://discordapp.com/api/webhooks/example/URL",
       "https://discordapp.com/api/webhooks/example2/URL2"],
     "Danbooru": true,
-    "Konachan": true
+    "Konachan": true,
+    "Rule34": true
   },
   {
     "criteria": "touhou",
@@ -17,7 +18,8 @@
       "https://discordapp.com/api/webhooks/example3/URL3",
       "https://discordapp.com/api/webhooks/example4/URL4"],
     "Danbooru": true,
-    "Konachan": true
+    "Konachan": true,
+    "Rule34": true
   },
   {
     "criteria": "yuri",
@@ -25,6 +27,7 @@
     "NSFW": false,
     "Discord uri": ["https://discordapp.com/api/webhooks/example5/URL5"],
     "Danbooru": true,
-    "Konachan": true
+    "Konachan": true,
+    "Rule34": true
   }
  ]

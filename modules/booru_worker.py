@@ -1,18 +1,20 @@
 import asyncio
 import random
 import traceback
+import json
 from aiohttp_requests import requests
 from modules import webhook_handler
 # custom tweaks for each booru
 from modules import conf_danbooru
 from modules import conf_konachan
-
+from modules import conf_rule34
 
 def add_booru_to_check(config):
     # we can use this to dynamically add booru's enabled by the user
     booru_dict = {
         "Danbooru": conf_danbooru.DanbooruSettings(),
-        "Konachan": conf_konachan.KonachanSettings()
+        "Konachan": conf_konachan.KonachanSettings(),
+        "Rule34": conf_rule34.Rule34Settings()
     }
     enabled_boards = []
     for key, board_object in booru_dict.items():
@@ -65,14 +67,23 @@ class SearchTask:
             "Referer": "http://behoimi.org/post/show/",
             "User-Agent": "Mozilla/5.0"}
 
+    async def gelbooru_get_method(self, url):
+        # get content
+        response = await requests.get(url, headers=self.token_headers)
+        # we have to read it into byte array because safebooru is trash
+        message_content_string = await response.read()
+        # convert bytes to JSON
+        message_json = json.loads(message_content_string)
+        return message_json
+
     async def get_latest_image_id(self, current_booru_obj):
         # used to get the latest image id on startup
 
         # check if booru requires bespoke get function
-        if current_booru_obj.custom_get_function:
-            json = await current_booru_obj.custom_request_command(
-                current_booru_obj.Initialize_URL % self.Search_Criteria)
-        else:
+        if current_booru_obj.booru_type == "gelbooru":
+            # so far only safebooru requires this
+            json = await self.gelbooru_get_method(current_booru_obj.Initialize_URL % self.Search_Criteria)
+        elif current_booru_obj.booru_type == "danbooru":
             # get json the simple way
             response = await requests.get(current_booru_obj.Initialize_URL % self.Search_Criteria,
                                           headers=self.token_headers)
@@ -80,6 +91,10 @@ class SearchTask:
         # if the json length is zero, the search reference is not valid
         if len(json) == 0:
             print("There are no matches for %r on board %r" % (self.Search_Criteria, current_booru_obj.board_name))
+            current_booru_obj.Previous_Image_ID = None
+        elif json[0]['id'] == "N/A":
+            # we don't need to spit out error
+            print("Skipped NSFW search %r for safebooru" % self.Search_Criteria)
             current_booru_obj.Previous_Image_ID = None
         else:
             # return new previous ID
@@ -89,9 +104,8 @@ class SearchTask:
         # get the latest image list uploaded after self.Previous_Image_ID
 
         # check if booru requires bespoke get function
-        if current_booru_obj.custom_get_function:
-            image_list_json = await current_booru_obj.custom_request_command(
-                current_booru_obj.Initialize_URL % self.Search_Criteria)
+        if current_booru_obj.booru_type == "gelbooru":
+            image_list_json = await self.gelbooru_get_method(current_booru_obj.Scrape_URL % (self.Search_Criteria, current_booru_obj.Previous_Image_ID))
         else:
             response = await requests.get(current_booru_obj.Scrape_URL % (self.Search_Criteria,
                                                                           current_booru_obj.Previous_Image_ID))
@@ -118,7 +132,7 @@ class SearchTask:
 
             # check if images breaks Discord T+C's
             for illegal_tag in self.Forbidden_Tags:
-                if illegal_tag in Image_metadata[current_booru_obj.tag_json_title] and Image_metadata['rating'] != 's':
+                if illegal_tag in Image_metadata[current_booru_obj.tag_json_title] and not str(Image_metadata['rating']).startswith('s'):
                     print('\033[31m'
                           + "Error: skipping NSFW image %r matching '%s' because it contains Discord illegal tag: %s" %
                           (Image_metadata['id'], self.Search_Criteria, illegal_tag)
