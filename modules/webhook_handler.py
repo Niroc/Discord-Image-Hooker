@@ -2,6 +2,10 @@ import asyncio
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
+def fix_html_characters(text):
+    return text.replace('_', '\\_').replace('%29', ')').replace('%28', '(')
+
+
 async def make_embed(character=None, artist=None, post_url=None, file_url=None, colour=None, timestamp=None,
                      origin_site=None, origin_site_url=None, source=None, is_banned=False):
     # print("character=%r\nartist=%r\npost_url=%r\nfile_url=%r\ncolour=%r\ntimestamp=%r\norigin_site=%r\norigin_site_url=%r\nsource=%r\nis_banned=%r\n" % (
@@ -25,7 +29,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         # this should never get called
         description_text = ''
 
-    title_string = "%s by %s" % (character, artist)
+    title_string = fix_html_characters("%s by %s" % (character, artist))
 
     # very log titles will cause the embed to fail
     if len(title_string) < 256:
@@ -55,7 +59,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
-        embed.add_embed_field(inline=False, name="Video URL (I'm not allowed to embed these like with images)",
+        embed.add_embed_field(inline=False, name="Video URL (I can't embed these like with images)",
                               value=file_url)
     elif not is_banned:
         embed.set_image(url=file_url)
