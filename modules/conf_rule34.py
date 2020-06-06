@@ -34,8 +34,7 @@ class Rule34Settings:
         img_id = str(image_metadata['id'])
 
         post_url = self.Main_URL + img_id
-        # https://img.rule34.xxx//samples/3408/sample_ffb5dfcf0cc3d23d413b714b5554ff5d.jpg?3842219
-        # https://rule34.xxx//images/3408/ffb5dfcf0cc3d23d413b714b5554ff5d.jpeg
+
         img_file_url = "https://rule34.xxx//images/" + image_metadata['directory'] + "/" + image_metadata['image']
 
         booru_name = self.board_name
