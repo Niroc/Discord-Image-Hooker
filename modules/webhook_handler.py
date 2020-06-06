@@ -40,16 +40,14 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         # concat leftovers with source link
         description_text = title_leftovers + "\n" + description_text
 
-    if len(description_text) > 0:
-        embed = DiscordEmbed(title=title, description=description_text, color=colour)
-    else:
-        embed = DiscordEmbed(title=title, color=colour)
+    # shameless self-promotion with url
+    description_text = description_text + " | Powered by [Discord Image Hooker](https://github.com/Niroc/Discord-Image-Hooker)"
+
+    # make an embed object
+    embed = DiscordEmbed(title=title, description=description_text, color=colour)
 
     # URL to post (not the source)
     embed.set_url(url=post_url)
-
-    # shameless self-promotion
-    embed.set_footer(text="Powered by Discord Image Hooker")
 
     if timestamp is not None:
         embed.set_timestamp(timestamp=int(timestamp))
