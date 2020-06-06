@@ -41,7 +41,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         description_text = title_leftovers + "\n" + description_text
 
     # shameless self-promotion with url
-    description_text = description_text + " | Powered by [Discord Image Hooker](https://github.com/Niroc/Discord-Image-Hooker)"
+    description_text = description_text + " | Powered by [Image Hooker](https://github.com/Niroc/Discord-Image-Hooker)"
 
     # make an embed object
     embed = DiscordEmbed(title=title, description=description_text, color=colour)
