@@ -7,6 +7,7 @@ Auto image poster for Discord using Webhooks that's able to search for specific 
 (You can enable or disable these per search reference if you do not like a particular imageboard)
 * Danbooru
 * Konachan
+* Rule34 (Disabled by default... furry warning)
 
 ### Requirements
 You need to install these...
