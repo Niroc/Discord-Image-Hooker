@@ -17,6 +17,9 @@ class DanbooruSettings:
         # either danbooru or gelbooru
         self.booru_type = "danbooru"
 
+        # either 'safe', 'nsfw' or 'any'
+        self.content_type = 'any'
+
         # sites like to have custom field names
         self.tag_json_title = 'tag_string'
         self.md5_tag = 'md5'

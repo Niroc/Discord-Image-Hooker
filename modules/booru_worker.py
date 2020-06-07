@@ -20,7 +20,20 @@ def add_booru_to_check(config):
     for key, board_object in booru_dict.items():
         try:
             if config[key]:  # flag must be set to true
-                enabled_boards.append(board_object)
+                if config['NSFW'] is True and board_object.content_type == 'safe':
+                    # search is NSFW but, board only supports safe content so skip
+                    #print("> Not enabling search for %r - NSFW: %r on board %r" % (config['criteria'],
+                    #                                                             config['NSFW'],
+                    #                                                             board_object.board_name))
+                    pass
+                elif config['NSFW'] is False and board_object.content_type == 'nsfw':
+                    # search is safe only but board only has nsfw content so skip
+                    #print("> Not enabling search for %r - NSFW: %r on board %r" % (config['criteria'],
+                    #                                                             config['NSFW'],
+                    #                                                             board_object.board_name))
+                    pass
+                else:
+                    enabled_boards.append(board_object)
         except:
             pass  # nothing was configured
     if len(enabled_boards) == 0:

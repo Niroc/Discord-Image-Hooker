@@ -19,6 +19,9 @@ class Rule34Settings:
         # either danbooru or gelbooru
         self.booru_type = "gelbooru"
 
+        # either 'safe', 'nsfw' or 'any'
+        self.content_type = 'nsfw'
+
         # sites like to have custom field names
         self.tag_json_title = 'tags'
         self.md5_tag = 'hash'
