@@ -12,6 +12,7 @@ class Rule34Settings:
         self.Scrape_URL = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&tags=%s+id:%%3E=%i&json=1"
         self.Main_URL = "https://rule34.xxx/index.php?page=post&s=view&id="
         self.Home_URL = "https://rule34.xxx/"
+        self.image_URL = "https://rule34.xxx/images"
 
         # We will need to keep track of the last image ID we posted
         self.Previous_Image_ID = None
@@ -38,7 +39,16 @@ class Rule34Settings:
 
         post_url = self.Main_URL + img_id
 
-        img_file_url = "https://rule34.xxx/images/" + image_metadata['directory'] + "/" + image_metadata['image']
+        # this doesn't always work
+        # img_file_url = "https://rule34.xxx/images/" + image_metadata['directory'] + "/" + image_metadata['image']
+
+        # sometimes the directory prefix on rule34 has a forward slash... sometimes it doesn't
+        picture_dir = image_metadata['directory'] + "/" + image_metadata['image']
+        if str(picture_dir).startswith('/'):
+            img_file_url = self.image_URL + picture_dir
+        else:
+            img_file_url = self.image_URL + "/" + picture_dir
+
 
         booru_name = self.board_name
 
