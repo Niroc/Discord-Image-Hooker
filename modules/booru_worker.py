@@ -196,9 +196,11 @@ class SearchTask:
             # we must met all of the criteria outlined above so add the image...
             Images_to_send.append(Image_metadata)
 
-        # be sure to update this even if there's nothing valid to post to reduce traffic
-        if current_booru_obj.Previous_Image_ID != image_list_json[0]['id']:
-            current_booru_obj.Previous_Image_ID = image_list_json[0]['id']
+            index_number = await self.get_latest_valid_id_index(0, image_list_json)
+
+            # be sure to update this even if there's nothing valid to post to reduce traffic
+            if current_booru_obj.Previous_Image_ID != image_list_json[index_number]['id']:
+                current_booru_obj.Previous_Image_ID = image_list_json[index_number]['id']
 
         if len(Images_to_send) > 0:
             # send our list we've built
@@ -206,6 +208,17 @@ class SearchTask:
             return embeds
         else:
             return []
+
+    async def get_latest_valid_id_index(self, index, image_list_json):
+        # if duff data then skip current index and check again... eventually we will hit the previous working record
+        # pass on bad data
+        if 'id' not in image_list_json[index]:
+            index += 1
+            # check again incase there 2 or more duff records
+            await self.get_latest_valid_id_index(index, image_list_json)
+
+        # return number of a valid index
+        return index
 
     async def make_discord_content(self, list_of_images, current_booru_obj):
         # turn our metadata into Discord Embeds
