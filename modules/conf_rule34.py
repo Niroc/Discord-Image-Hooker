@@ -91,7 +91,24 @@ class Rule34Settings:
             timestamp = str(each).split('Posted: ')[1].split('<br')[0]
             try:
                 # this isn't always included on rule 34
-                source = str(each).split('Source: <a href="')[1].split('"')[0]
+                #source = str(each).split('Source: <a href="')[1].split('"')[0]
+
+                # for some reason they include peoples home twitter url instead of just the source tweet
+                source_xml = str(each).split('Source: ')[1].split('/li>')[0]
+                if "twitter.com" not in source_xml:
+                    # just do regular string slice
+                    source = str(source_xml).split('<a href="')[1].split('"')[0]
+                elif source_xml.count('twitter') == 2:
+                    # this is also normal
+                    source = str(source_xml).split('<a href="')[1].split('"')[0]
+                else:
+                    possible_tweet_urls = str(source_xml).split('href="')
+                    for p in possible_tweet_urls:
+                        if "status" in p:
+                            #print("R34 twitter source link fixer worked!")
+                            # we've found the correct url!!
+                            source = str(p).split('"')[0]
+
             except:
                 source = None
 
