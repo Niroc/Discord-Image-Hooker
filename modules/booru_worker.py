@@ -135,6 +135,11 @@ class SearchTask:
             # Discord Webhooks can send multiple embeds in a single message
             # so lets build a list of items to send...
             #print("checking: %r" % Image_metadata['id'])
+
+            # pass on bad data
+            if 'id' not in Image_metadata:
+                continue
+
             # check if the image ID matches our previous image idea on record
             if Image_metadata['id'] == current_booru_obj.Previous_Image_ID:
                 continue
