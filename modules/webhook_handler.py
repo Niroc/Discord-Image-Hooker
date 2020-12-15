@@ -97,7 +97,7 @@ async def send_to_discord(webhook_list, embed_list, criteria, nsfw):
 
 async def post_embeds(webhook_url, embed_list):
     # ensure user provided discord url is accurate
-    if not webhook_url.lower().startswith("https://discordapp.com/api/webhooks/"):
+    if not webhook_url.lower().startswith("https://discord"):
         webhook_url = "https://discordapp.com/api/webhooks/" + webhook_url
 
     webhook = DiscordWebhook(url=webhook_url)
