@@ -91,7 +91,7 @@ async def send_to_discord(webhook_list, embed_list, criteria, nsfw):
         # send to each possible webhook uri
         for webhook_uri in webhook_list:
             await post_embeds(webhook_uri, sorted_list_of_embeds)
-            await asyncio.sleep(2)  # short delay to help prevent rate limiting
+            await asyncio.sleep(5)  # short delay to help prevent rate limiting
         await asyncio.sleep(10)  # short delay to help prevent rate limiting
 
 
@@ -106,9 +106,10 @@ async def post_embeds(webhook_url, embed_list):
     for embed in embed_list:
         webhook.add_embed(embed)
 
-    response = webhook.execute()
-    if response.status_code == 404 or response.status_code == 401:
-        print('\033[31m'  # set terminal text to red
-              + 'Error: The following Webhook URL in your config.json file is invalid...\n'
-              + '%r' % webhook_url
-              + '\033[39m')  # reset to default color
+    response_list = webhook.execute()
+    for response in response_list:
+        if response.status_code == 404 or response.status_code == 401:
+            print('\033[31m'  # set terminal text to red
+                  + 'Error: The following Webhook URL in your config.json file is invalid...\n'
+                  + '%r' % webhook_url
+                  + '\033[39m')  # reset to default color
