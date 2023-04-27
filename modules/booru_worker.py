@@ -99,7 +99,7 @@ class SearchTask:
         elif current_booru_obj.booru_type == "danbooru":
             # get json the simple way
             response = await requests.get(current_booru_obj.Initialize_URL % self.Search_Criteria,
-                                          headers=self.token_headers)
+                                          headers=self.token_headers, timeout=120)
             json = await response.json()
         # if the json length is zero, the search reference is not valid
         if len(json) == 0:
@@ -121,7 +121,7 @@ class SearchTask:
             image_list_json = await self.gelbooru_get_method(current_booru_obj.Scrape_URL % (self.Search_Criteria, current_booru_obj.Previous_Image_ID))
         else:
             response = await requests.get(current_booru_obj.Scrape_URL % (self.Search_Criteria,
-                                                                          current_booru_obj.Previous_Image_ID))
+                                                                          current_booru_obj.Previous_Image_ID), timeout=120)
             try:
                 image_list_json = await response.json()
             except:
@@ -136,7 +136,7 @@ class SearchTask:
             # so lets build a list of items to send...
             #print("checking: %r" % Image_metadata['id'])
 
-            # pass on bad data
+            # pass on bad deeter iata
             if 'id' not in Image_metadata:
                 continue
 
@@ -172,9 +172,9 @@ class SearchTask:
             # check matches one of the desired safety ratings else continue to next loop if it doesn't
             if str(self.Post_NSFW).lower() == "any":
                 pass  # we don't care about safety rating
-            elif self.Post_NSFW is False and Image_metadata['rating'].startswith('s'):
+            elif self.Post_NSFW is False and (Image_metadata['rating'].startswith('s') or Image_metadata['rating'].startswith('g')):
                 pass
-            elif self.Post_NSFW and not Image_metadata['rating'].startswith('s'):
+            elif self.Post_NSFW and not Image_metadata['rating'].startswith('g'):
                 pass
             else:  # new entry must not match the desired safety rating
                 continue
@@ -220,20 +220,37 @@ class SearchTask:
         # return number of a valid index
         return index
 
+    async def fix_html_characters(self, text):
+        return text.replace('_', '\\_').replace('%29', ')').replace('%28', '(')
+
     async def make_discord_content(self, list_of_images, current_booru_obj):
         # turn our metadata into Discord Embeds
         embed_list = []
+        count = 0
+        current_url = ''
+        list_of_chars_and_artist = []
+        for img in list_of_images:
+            characters, artist, post_url, img_file_url2, timestamp, booru_name, home_url, source, is_banned = \
+                await current_booru_obj.get_json_data(img)
+            if source == '' or source is None or not source.startswith('http'):
+                list_of_chars_and_artist.append(await self.fix_html_characters("\\> %s by %s\n" % (characters, artist)))
+            else:
+                list_of_chars_and_artist.append("\\> [%s by %s](%s)\n" % (await self.fix_html_characters(characters), await self.fix_html_characters(artist), source))
 
         for image_metadata in list_of_images:
-
             # use our custom conf python files to get this data
             characters, artist, post_url, img_file_url, timestamp, booru_name, home_url, source, is_banned = \
                 await current_booru_obj.get_json_data(image_metadata)
 
-            img_id = image_metadata['id']
+            # if true, then 'count' is a multiple of 4
+            if ((count & 3) == 0):
 
-            # generate Discord embed object
-            discord_embed = await webhook_handler.make_embed(character=characters,
+                img_id = image_metadata['id']
+                
+                current_url = post_url
+
+                # generate Discord embed object
+                discord_embed = await webhook_handler.make_embed(character=characters,
                                                              artist=artist,
                                                              post_url=post_url,
                                                              file_url=img_file_url,
@@ -242,7 +259,14 @@ class SearchTask:
                                                              origin_site=booru_name,
                                                              origin_site_url=home_url,
                                                              source=source,
-                                                             is_banned=is_banned)
+                                                             is_banned=is_banned,
+                                                             finished_description="".join(list_of_chars_and_artist[0:4]))
+                # delete what we've already posted
+                del list_of_chars_and_artist[0:4]
+            else:
+                discord_embed = await webhook_handler.make_embed_small(img_file_url, current_url)
+                
+            count += 1
 
             if discord_embed is not None:
                 # add valid embed to the list
@@ -260,8 +284,9 @@ class SearchTask:
 
         # main loop
         while True:
-            # make random sleep delay between 5 ~ 20 minutes
-            await asyncio.sleep(random.randint(300, 1200))
+            # make random sleep delay between 20 ~ 30 minutes
+            await asyncio.sleep(random.randint(1200, 1800))
+            #print("trying %r" % self.Search_Criteria)
 
             # use traceback lib so we actually get a stacktrace as we're use asyncio...
             try:
