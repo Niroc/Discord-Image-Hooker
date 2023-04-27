@@ -48,23 +48,29 @@ async def send_to_discord(webhook_list, embed_list, criteria, nsfw):
 
     print("Sending %r embed/s matching %r NSFW = %r" % (len(embed_list), criteria, nsfw))
 
+    count = 0
+    to_send = []
+    # only send up to 4 embeds
     for embed in embed_list:
-        # check if we've hit the 10 embed limit
-        if len(embeds_to_send[unique_key]) == 10:
-            # if true, it's time to make another unique key for a new hash table entry
-            unique_key += "a"
-            # also make another emtpy list to append to
-            embeds_to_send[unique_key] = []
+        # if divisible by 4
+        if ((count & 3) == 0):
+            if len(to_send) > 0:
+                await post_checker(webhook_list, to_send)
+                to_send.clear()
+        to_send.append(embed)
+        count += 1
 
-        embeds_to_send[unique_key].append(embed)
+    #catch leftover embeds
+    if len(to_send) > 0:
+        await post_checker(webhook_list, to_send)
+        to_send.clear()
 
-    # loop around each possible set of 10 embeds
-    for key, sorted_list_of_embeds in embeds_to_send.items():
-        # send to each possible webhook uri
-        for webhook_uri in webhook_list:
-            await post_embeds(webhook_uri, sorted_list_of_embeds)
-            await asyncio.sleep(0.5)  # short delay to help prevent rate limiting
-        await asyncio.sleep(10)  # short delay to help prevent rate limiting
+
+async def post_checker(webhook_list, sorted_list_of_embeds):
+    for webhook_uri in webhook_list:
+        await post_embeds(webhook_uri, sorted_list_of_embeds)
+        await asyncio.sleep(1)  # short delay to help prevent rate limiting
+    await asyncio.sleep(1)  # short delay to help prevent rate limiting
 
 
 async def post_embeds(webhook_url, embed_list):
