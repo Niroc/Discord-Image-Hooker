@@ -272,7 +272,7 @@ class SearchTask:
                                                              origin_site_url=home_url,
                                                              source=source,
                                                              is_banned=is_banned,
-                                                             finished_description="".join(list_of_chars_and_artist[0:4])),
+                                                             finished_description="".join(list_of_chars_and_artist[0:4]),
                                                              ID_list=IDs[0:4])
                                                             
                 # delete what we've already posted
