@@ -22,7 +22,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     embed.set_author(name="Discord Image Hooker", url="https://github.com/Niroc/Discord-Image-Hooker")
     
     if len(ID_list) == 1:
-        embed.set_footer(text='%s ID: %s' % (ID_list[0][1], ID_list[0][1]))
+        embed.set_footer(text='%s ID: %s' % (ID_list[0][0], ID_list[0][1]))
     else:
         # assume true
         all_match = True
@@ -30,7 +30,6 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
         for board_id in ID_list:
             if board_id[0] is not ID_list[0][0]:
                 all_match = False
-
         if all_match:
             id_string = '%s IDs: ' % (ID_list[0][0])
             for board_id in ID_list:
