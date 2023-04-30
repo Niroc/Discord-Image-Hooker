@@ -22,15 +22,11 @@ def add_booru_to_check(config):
             if config[key]:  # flag must be set to true
                 if config['NSFW'] is True and board_object.content_type == 'safe':
                     # search is NSFW but, board only supports safe content so skip
-                    #print("> Not enabling search for %r - NSFW: %r on board %r" % (config['criteria'],
-                    #                                                             config['NSFW'],
-                    #                                                             board_object.board_name))
+                    print("> %s only supports safe content, NSFW search for %s canceled." % (board_object.board_name, config['criteria']))
                     pass
                 elif config['NSFW'] is False and board_object.content_type == 'nsfw':
                     # search is safe only but board only has nsfw content so skip
-                    #print("> Not enabling search for %r - NSFW: %r on board %r" % (config['criteria'],
-                    #                                                             config['NSFW'],
-                    #                                                             board_object.board_name))
+                    print("> %s only supports NSFW content, safe search for %s canceled." % (board_object.board_name, config['criteria']))
                     pass
                 else:
                     enabled_boards.append(board_object)
