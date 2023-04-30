@@ -7,7 +7,8 @@ def fix_html_characters(text):
 
 
 async def make_embed(character=None, artist=None, post_url=None, file_url=None, colour=None, timestamp=None,
-                     origin_site=None, origin_site_url=None, source=None, is_banned=False, finished_description=''):
+                     origin_site=None, origin_site_url=None, source=None, is_banned=False, finished_description='',
+                     ID_list=[]):
 
     if colour is None:
         colour = 0xd7d7d7  # white, mostly
@@ -19,6 +20,11 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     embed.set_url(url=post_url)
 
     embed.set_author(name="Discord Image Hooker", url="https://github.com/Niroc/Discord-Image-Hooker")
+    
+    if len(ID_list) == 1:
+        embed.set_footer(text='%s ID: %s' % (origin_site, ID_list[0]))
+    else:
+        embed.set_footer(text='%s IDs: %s' % (origin_site, ' '.join(ID_list)))
 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
