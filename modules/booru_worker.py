@@ -229,6 +229,7 @@ class SearchTask:
         count = 0
         current_url = ''
         list_of_chars_and_artist = []
+        IDs = []
         for img in list_of_images:
             characters, artist, post_url, img_file_url2, timestamp, booru_name, home_url, source, is_banned = \
                 await current_booru_obj.get_json_data(img)
@@ -246,6 +247,7 @@ class SearchTask:
                 # use source link provided
                 list_of_chars_and_artist.append("\\> [%s by %s](%s)\n" % (
                     await self.fix_html_characters(characters), await self.fix_html_characters(artist), source))
+            IDs.append(str(img['id']))
 
         for image_metadata in list_of_images:
             # use our custom conf python files to get this data
@@ -270,9 +272,12 @@ class SearchTask:
                                                              origin_site_url=home_url,
                                                              source=source,
                                                              is_banned=is_banned,
-                                                             finished_description="".join(list_of_chars_and_artist[0:4]))
+                                                             finished_description="".join(list_of_chars_and_artist[0:4])),
+                                                             ID_list=IDs[0:4])
+                                                            
                 # delete what we've already posted
                 del list_of_chars_and_artist[0:4]
+                del IDs[0:4]
             else:
                 discord_embed = await webhook_handler.make_embed_small(img_file_url, current_url)
                 
