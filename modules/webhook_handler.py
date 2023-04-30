@@ -22,9 +22,25 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
     embed.set_author(name="Discord Image Hooker", url="https://github.com/Niroc/Discord-Image-Hooker")
     
     if len(ID_list) == 1:
-        embed.set_footer(text='%s ID: %s' % (origin_site, ID_list[0]))
+        embed.set_footer(text='%s ID: %s' % (ID_list[0][1], ID_list[0][1]))
     else:
-        embed.set_footer(text='%s IDs: %s' % (origin_site, ' '.join(ID_list)))
+        # assume true
+        all_match = True
+        # check the booru's match
+        for board_id in ID_list:
+            if board_id[0] is not ID_list[0][0]:
+                all_match = False
+
+        if all_match:
+            id_string = '%s IDs: ' % (ID_list[0][0])
+            for board_id in ID_list:
+                id_string += board_id[1] + ' '
+            embed.set_footer(text=id_string)
+        else:
+            id_string = 'IDs: '
+            for board_id in ID_list:
+                id_string += ':'.join(board_id) + ' '
+            embed.set_footer(text=id_string)
 
     # check if video
     if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
