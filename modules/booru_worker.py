@@ -23,11 +23,9 @@ def add_booru_to_check(config):
                 if config['NSFW'] is True and board_object.content_type == 'safe':
                     # search is NSFW but, board only supports safe content so skip
                     print("> %s only supports safe content, NSFW search for %s canceled." % (board_object.board_name, config['criteria']))
-                    pass
                 elif config['NSFW'] is False and board_object.content_type == 'nsfw':
                     # search is safe only but board only has nsfw content so skip
                     print("> %s only supports NSFW content, safe search for %s canceled." % (board_object.board_name, config['criteria']))
-                    pass
                 else:
                     enabled_boards.append(board_object)
         except:
@@ -243,7 +241,7 @@ class SearchTask:
                 # use source link provided
                 list_of_chars_and_artist.append("\\> [%s by %s](%s)\n" % (
                     await self.fix_html_characters(characters), await self.fix_html_characters(artist), source))
-            IDs.append(str(img['id']))
+            IDs.append([booru_name, str(img['id'])])
 
         for image_metadata in list_of_images:
             # use our custom conf python files to get this data
