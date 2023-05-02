@@ -8,19 +8,24 @@ from modules import webhook_handler
 from modules import conf_danbooru
 from modules import conf_konachan
 from modules import conf_rule34
+from modules import conf_safebooru
 
 def add_booru_to_check(config):
     # we can use this to dynamically add booru's enabled by the user
     booru_dict = {
         "Danbooru": conf_danbooru.DanbooruSettings(),
         "Konachan": conf_konachan.KonachanSettings(),
+        "Safebooru": conf_safebooru.SafebooruSettings(),
         "Rule34": conf_rule34.Rule34Settings()
     }
     enabled_boards = []
     for key, board_object in booru_dict.items():
         try:
             if config[key]:  # flag must be set to true
-                if config['NSFW'] is True and board_object.content_type == 'safe':
+                if key == 'Safebooru' and config['Danbooru'] is True:
+                    # safebooru is a safe backup of danbooru
+                    print('> Safebooru search not started as Danbooru is enabled')
+                elif config['NSFW'] is True and board_object.content_type == 'safe':
                     # search is NSFW but, board only supports safe content so skip
                     print("> %s only supports safe content, NSFW search for %s canceled." % (board_object.board_name, config['criteria']))
                 elif config['NSFW'] is False and board_object.content_type == 'nsfw':
