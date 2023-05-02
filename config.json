@@ -7,6 +7,7 @@
       "https://discordapp.com/api/webhooks/example/URL",
       "https://discordapp.com/api/webhooks/example2/URL2"],
     "Danbooru": true,
+    "Safebooru": false,
     "Konachan": true,
     "Rule34": false
   },
@@ -18,6 +19,7 @@
       "https://discordapp.com/api/webhooks/example3/URL3",
       "https://discordapp.com/api/webhooks/example4/URL4"],
     "Danbooru": true,
+    "Safebooru": false,
     "Konachan": true,
     "Rule34": false
   },
@@ -27,6 +29,7 @@
     "NSFW": false,
     "Discord uri": ["https://discordapp.com/api/webhooks/example5/URL5"],
     "Danbooru": true,
+    "Safebooru": false,
     "Konachan": true,
     "Rule34": false
   }
