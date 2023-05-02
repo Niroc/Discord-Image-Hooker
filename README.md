@@ -7,7 +7,8 @@ Images are posted with character / artist name and a link to the source material
 
 ## Currently supports scraping from...
 (You can enable or disable these per search reference if you do not like a particular imageboard)
-* Danbooru
+* Danbooru ~ (Questionable content maybe still get posted on safe searches, use Safebooru for stricter searching.)
+* Safebooru ~ (This is a safe for work only backup of Danbooru that can be used in places with NFSW domain internet filtering.)
 * Konachan
 * Rule34 (Disabled by default... furry warning)
 
