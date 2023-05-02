@@ -232,6 +232,11 @@ class SearchTask:
         for img in list_of_images:
             characters, artist, post_url, img_file_url2, timestamp, booru_name, home_url, source, is_banned = \
                 await current_booru_obj.get_json_data(img)
+
+            # default to unknown when no artist is supplied
+            if len(artist) == 0:
+                artist = 'Unknown'
+
             # see if source url is populated with a link
             if source == '' or source is None or not source.startswith('http'):
                 # if source url is duff check if post url is ok
