@@ -37,7 +37,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
                 id_string += ':'.join(board_id) + ' '
             embed.set_footer(text=id_string)
 
-   if not is_banned:
+    if not is_banned:
         embed.set_image(url=file_url)
     else:
         pass
