@@ -241,7 +241,7 @@ class SearchTask:
         return index
 
     async def fix_html_characters(self, text):
-        return text.replace('_', '\\_').replace('%29', ')').replace('%28', '(')
+        return text.replace('%29', ')').replace('%28', '(').replace('%27', '\'')
 
     async def make_discord_content(self, list_of_images, current_booru_obj):
         # turn our metadata into Discord Embeds
