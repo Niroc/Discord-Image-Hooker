@@ -37,11 +37,7 @@ async def make_embed(character=None, artist=None, post_url=None, file_url=None, 
                 id_string += ':'.join(board_id) + ' '
             embed.set_footer(text=id_string)
 
-    # check if video
-    if file_url.lower().endswith('mp4') or file_url.lower().endswith("webm"):
-        embed.add_embed_field(inline=False, name="Video URL (I can't embed these like with images)",
-                              value=file_url)
-    elif not is_banned:
+   if not is_banned:
         embed.set_image(url=file_url)
     else:
         pass
