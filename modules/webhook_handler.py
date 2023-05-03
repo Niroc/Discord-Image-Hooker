@@ -2,10 +2,6 @@ import asyncio
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
-def fix_html_characters(text):
-    return text.replace('_', '\\_').replace('%29', ')').replace('%28', '(')
-
-
 async def make_embed(character=None, artist=None, post_url=None, file_url=None, colour=None, timestamp=None,
                      origin_site=None, origin_site_url=None, source=None, is_banned=False, finished_description='',
                      ID_list=[]):
