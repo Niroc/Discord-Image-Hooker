@@ -284,6 +284,10 @@ class SearchTask:
             characters, artist, post_url, img_file_url, timestamp, booru_name, home_url, source, is_banned = \
                 await current_booru_obj.get_json_data(image_metadata)
 
+            # discord won't display .gifv images at all but changing the extension to .gif will at least display the first frame
+            if img_file_url.lower().endswith('.gifv'):
+                img_file_url = img_file_url[:-1]
+
             # if true, then 'count' is a multiple of 4
             if ((count & 3) == 0):
 
