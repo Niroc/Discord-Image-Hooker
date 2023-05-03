@@ -258,6 +258,11 @@ class SearchTask:
             characters, artist, post_url, img_file_url2, timestamp, booru_name, home_url, source, is_banned = \
                 await current_booru_obj.get_json_data(img)
 
+            # remove if video, they don't work
+            if img_file_url2.lower().endswith('mp4') or img_file_url2.lower().endswith("webm"):
+                list_of_images.remove(img)
+                continue
+
             # default to unknown when no artist is supplied
             if len(artist) == 0:
                 artist = 'Unknown'
