@@ -267,7 +267,8 @@ class SearchTask:
                 # if source url is duff check if post url is ok
                 if post_url == '' or post_url is None or not post_url.startswith('http'):
                     # both source and post url are bad, don't add link
-                    list_of_chars_and_artist.append(await self.fix_html_characters("\\> %s by %s\n" % (characters, artist)))
+                    list_of_chars_and_artist.append("\\> %s by %s\n" % (
+                            await self.fix_html_characters(characters), await self.fix_html_characters(artist)))
                 else:
                     # source is bad, failover to post url
                     list_of_chars_and_artist.append("\\> [%s by %s](%s)\n" % (
