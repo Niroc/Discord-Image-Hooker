@@ -213,7 +213,7 @@ class SearchTask:
                 #print("%r already exists in table: %r, will skip" % (Image_metadata['id'], self.table_name))
                 continue
 
-            # we must met all of the criteria outlined above so add the image...
+            # we must have met all of the criteria outlined above so add the image...
             Images_to_send.append(Image_metadata)
 
             index_number = await self.get_latest_valid_id_index(0, image_list_json)
