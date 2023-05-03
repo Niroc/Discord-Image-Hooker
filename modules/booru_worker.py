@@ -2,6 +2,8 @@ import asyncio
 import random
 import traceback
 import json
+
+import aiohttp
 from aiohttp_requests import requests
 from modules import webhook_handler
 # custom tweaks for each booru
@@ -80,26 +82,53 @@ class SearchTask:
             "User-Agent": "Mozilla/5.0"}
 
     async def gelbooru_get_method(self, url):
-        # get content
-        response = await requests.get(url, headers=self.token_headers)
-        # we have to read it into byte array for gelbooru based boards
-        message_content_string = await response.read()
+        try:
+            # get content
+            response = await requests.get(url, headers=self.token_headers)
+
+            # we have to read it into byte array for gelbooru based boards
+            message_content_string = await response.read()
+        except aiohttp.ClientConnectionError as C:
+            print('\033[31m' + str(C) + '\033[39m')
+            return []
         # convert bytes to JSON
-        message_json = json.loads(message_content_string)
+        #message_json = json.loads(message_content_string)
+        try:
+            message_json = json.loads(message_content_string)
+        except:
+            print('\033[31m' + "Error: Failed to encode json for gelbooru method")
+            print(message_content_string)
+            print('\033[39m')  # reset to default color
+            return []
+
         return message_json
 
-    async def get_latest_image_id(self, current_booru_obj):
-        # used to get the latest image id on startup
+    async def danbooru_get_method(self, url):
+        # get content
+        try:
+            response = await requests.get(url, headers=self.token_headers, timeout=120)
+        except aiohttp.ClientConnectionError as C:
+            print('\033[31m' + str(C) + '\033[39m')
+            return []
+        # encode json
+        try:
+            json = await response.json()
+        except:
+            print('\033[31m' + "Error: Failed to encode json for danbooru method")
+            print(message_content_string)
+            print('\033[39m')  # reset to default color
+            return []
 
+        return json
+
+    async def get_latest_image_id(self, current_booru_obj):
         # check if booru requires bespoke get function
         if current_booru_obj.booru_type == "gelbooru":
             # so far only safebooru requires this
             json = await self.gelbooru_get_method(current_booru_obj.Initialize_URL % self.Search_Criteria)
         elif current_booru_obj.booru_type == "danbooru":
-            # get json the simple way
-            response = await requests.get(current_booru_obj.Initialize_URL % self.Search_Criteria,
-                                          headers=self.token_headers, timeout=120)
-            json = await response.json()
+            json = await self.danbooru_get_method(current_booru_obj.Initialize_URL % self.Search_Criteria)
+
         # if the json length is zero, the search reference is not valid
         if len(json) == 0:
             print("There are no matches for %r on board %r" % (self.Search_Criteria, current_booru_obj.board_name))
@@ -118,16 +147,8 @@ class SearchTask:
         # check if booru requires bespoke get function
         if current_booru_obj.booru_type == "gelbooru":
             image_list_json = await self.gelbooru_get_method(current_booru_obj.Scrape_URL % (self.Search_Criteria, current_booru_obj.Previous_Image_ID))
-        else:
-            response = await requests.get(current_booru_obj.Scrape_URL % (self.Search_Criteria,
-                                                                          current_booru_obj.Previous_Image_ID), timeout=120)
-            try:
-                image_list_json = await response.json()
-            except:
-                print('\033[31m' + "Error: Failed to encode json")
-                print(response)
-                print('\033[39m')  # reset to default color
-                return
+        elif current_booru_obj.booru_type == "danbooru":
+            image_list_json = await self.danbooru_get_method(current_booru_obj.Scrape_URL % (self.Search_Criteria, current_booru_obj.Previous_Image_ID))
 
         Images_to_send = []
         for Image_metadata in image_list_json:
