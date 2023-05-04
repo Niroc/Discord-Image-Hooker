@@ -2,7 +2,6 @@ import asyncio
 import random
 import traceback
 import json
-
 import aiohttp
 from aiohttp_requests import requests
 from modules import webhook_handler
@@ -12,14 +11,17 @@ from modules import conf_konachan
 from modules import conf_rule34
 from modules import conf_safebooru
 
+# we can use this to dynamically add booru's enabled by the user
+booru_dict = {
+    "Danbooru": conf_danbooru.DanbooruSettings(),
+    "Konachan": conf_konachan.KonachanSettings(),
+    "Safebooru": conf_safebooru.SafebooruSettings(),
+    "REALBOORU": conf_realbooru.REALBOORUSettings(),
+    "Rule34": conf_rule34.Rule34Settings()
+}
+
+
 def add_booru_to_check(config):
-    # we can use this to dynamically add booru's enabled by the user
-    booru_dict = {
-        "Danbooru": conf_danbooru.DanbooruSettings(),
-        "Konachan": conf_konachan.KonachanSettings(),
-        "Safebooru": conf_safebooru.SafebooruSettings(),
-        "Rule34": conf_rule34.Rule34Settings()
-    }
     enabled_boards = []
     for key, board_object in booru_dict.items():
         try:
