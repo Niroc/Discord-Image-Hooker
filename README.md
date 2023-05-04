@@ -10,7 +10,8 @@ Images are posted with character / artist name and a link to the source material
 * Danbooru ~ (Questionable content maybe still get posted on safe searches, use Safebooru for stricter searching.)
 * Safebooru ~ (Safe for work backup of Danbooru that can be used in places with NFSW domain internet filtering.)
 * Konachan
-* Rule34 (Disabled by default... furry warning)
+* Rule34 
+* REALBOORU 
 
 ### Requirements
 You need to install these...
