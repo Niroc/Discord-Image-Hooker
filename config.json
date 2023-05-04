@@ -9,7 +9,8 @@
     "Danbooru": true,
     "Safebooru": false,
     "Konachan": true,
-    "Rule34": false
+    "Rule34": false,
+    "REALBOORU": false
   },
   {
     "criteria": "touhou",
@@ -21,7 +22,8 @@
     "Danbooru": true,
     "Safebooru": false,
     "Konachan": true,
-    "Rule34": false
+    "Rule34": false,
+    "REALBOORU": false
   },
   {
     "criteria": "yuri",
@@ -31,6 +33,7 @@
     "Danbooru": true,
     "Safebooru": false,
     "Konachan": true,
-    "Rule34": false
+    "Rule34": false,
+    "REALBOORU": false
   }
  ]
