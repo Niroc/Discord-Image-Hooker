@@ -9,6 +9,7 @@ from modules import webhook_handler
 from modules import conf_danbooru
 from modules import conf_konachan
 from modules import conf_rule34
+from modules import conf_realbooru
 from modules import conf_safebooru
 
 
