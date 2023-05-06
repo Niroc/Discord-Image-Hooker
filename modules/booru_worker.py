@@ -11,6 +11,8 @@ from modules import conf_konachan
 from modules import conf_rule34
 from modules import conf_safebooru
 
+
+def add_booru_to_check(config):
 # we can use this to dynamically add booru's enabled by the user
 booru_dict = {
     "Danbooru": conf_danbooru.DanbooruSettings(),
@@ -19,9 +21,6 @@ booru_dict = {
     "REALBOORU": conf_realbooru.REALBOORUSettings(),
     "Rule34": conf_rule34.Rule34Settings()
 }
-
-
-def add_booru_to_check(config):
     enabled_boards = []
     for key, board_object in booru_dict.items():
         try:
