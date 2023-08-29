@@ -3,7 +3,6 @@ Auto image poster for Discord using Webhooks that's able to search for specific 
 * This has MD5 checking per search reference to help stop duplicate images being posted.<br/>
 * This will filter out NSFW images that break Discords T&C's.<br/><br/>
 Images are posted with character / artist name and a link to the source material (if available)
-![image](https://user-images.githubusercontent.com/12100786/235229294-9d2c096e-883f-4ca6-a199-c04c946cf59f.png)
 
 ## Currently supports scraping from...
 (You can enable or disable these per search reference if you do not like a particular imageboard)
